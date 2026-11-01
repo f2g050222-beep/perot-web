@@ -1,0 +1,173 @@
+"use client";
+
+/* About PEROT：左滑标题、滚动揭示、肖像遮罩 + 视差、数字计数、闭环与路线图时间线 */
+import Link from "next/link";
+import { useEffect, useRef } from "react";
+import { Basketball, Flourish, StompShoe } from "@/components/motifs";
+
+const LETTERS = [
+  ["P", "Player", "球员", "系统首先认识你是谁：身体、脚型、位置与打法。"],
+  ["E", "Analysis", "分析 / 决策", "把身体、足部、场地、习惯与历史穿鞋体验，整理成一份用户画像。"],
+  ["R", "Recommendation", "推荐", "不是最高分推荐，而是匹配度推荐，并解释每一个理由。"],
+  ["O", "Optimization", "优化", "穿过之后的反馈会回到画像里，下一次推荐会更准。"],
+  ["T", "Technology", "技术", "数据、算法、鞋库与 Web，让判断变得可复现、可解释。"],
+];
+const STATS = [[5, "步用户画像测评"], [12, "双代表性鞋款首发"], [7, "级 PEROT 评级（含 GR）"], [6, "个环节的推荐闭环"]] as const;
+const LOOP = ["用户画像", "鞋款数据库", "匹配 / 相似度", "推荐", "用户反馈", "画像优化"];
+const VALUES = [
+  ["匹配度，而不是最高分", "最贵、评分最高的鞋，不一定是你的鞋。"],
+  ["每个推荐都要讲清楚", "可解释的推荐：为什么是它，差在哪里，一目了然。"],
+  ["真实的脚，真实的场", "脚型、伤情、室内外场地，都会改变答案。"],
+  ["简洁，低负担", "像 Apple 一样留白，像 Nike 一样有运动感。"],
+];
+const ROADMAP = [
+  ["2026.10", "现在", "PEROT 创意母库 v1.0 归档：确定名称、闭环与第一阶段目标用户（宽脚 + 体重较大的球员）。"],
+  ["PHASE 1–2", "现在", "网站原型：五步用户画像、12 双鞋款数据库、匹配与可解释推荐。"],
+  ["PHASE 3", "下一步", "后端与账号：数据库、API、登录、历史记录与穿着反馈。"],
+  ["PHASE 4", "之后", "Python 数据分析与推荐评估：Precision@K、NDCG@K、满意度。"],
+  ["PHASE 5", "长期", "AI 辅助：用户理解、推荐解释与自动化，不做聊天机器人。"],
+];
+
+export function AboutExperience() {
+  const root = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = root.current!;
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const io = new IntersectionObserver((es) => es.forEach((e) => {
+      if (!e.isIntersecting) return;
+      const t = e.target as HTMLElement;
+      t.classList.add("ab-in");
+      io.unobserve(t);
+      t.querySelectorAll<HTMLElement>("[data-count]").forEach((n) => {
+        const to = Number(n.dataset.count);
+        if (reduce) { n.textContent = String(to); return; }
+        const t0 = performance.now();
+        const step = (now: number) => {
+          const k = Math.min(1, (now - t0) / 1400);
+          n.textContent = String(Math.round(to * (1 - Math.pow(1 - k, 3))));
+          if (k < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      });
+    }), { threshold: 0.18 });
+    el.querySelectorAll(".ab-obs, .ab-watch").forEach((n) => io.observe(n));
+    /* 肖像视差 + 时间线进度（只改 transform） */
+    let raf = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        if (reduce) return;
+        const img = el.querySelector<HTMLElement>(".ab-portrait img");
+        const fig = el.querySelector<HTMLElement>(".ab-portrait");
+        if (img && fig) {
+          const r = fig.getBoundingClientRect();
+          const p = (r.top + r.height / 2 - innerHeight / 2) / innerHeight;
+          img.style.transform = `translate3d(0, ${p * -60}px, 0) scale(1.15)`;
+        }
+        const tl = el.querySelector<HTMLElement>(".ab-timeline");
+        if (tl) {
+          const r = tl.getBoundingClientRect();
+          const k = Math.max(0, Math.min(1, (innerHeight * 0.7 - r.top) / r.height));
+          tl.style.setProperty("--tl", String(k));
+        }
+        const big = el.querySelector<HTMLElement>(".ab-bigtype");
+        if (big) big.style.transform = `translate3d(${-scrollY * 0.25}px,0,0)`;
+      });
+    };
+    addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => { io.disconnect(); removeEventListener("scroll", onScroll); cancelAnimationFrame(raf); };
+  }, []);
+
+  return (
+    <div className="about-x" ref={root}>
+      <section className="ab-hero">
+        <div className="ab-bigtype" aria-hidden data-no-translate>PEROT · PEROT · PEROT</div>
+        <div className="ab-hero-inner">
+          <p className="eyebrow ab-obs">ABOUT PEROT</p>
+          <h1>鞋只是结果，<br /><em>人才是起点。</em></h1>
+          <p className="ab-lead">PEROT 是一个以用户为中心的篮球鞋分析与个性化推荐平台。我们不问“这双鞋好不好”，只问“这双鞋适不适合你”。</p>
+          <p className="ab-tag" data-no-translate>A personalized basketball footwear decision system.</p>
+          <span className="ab-scroll">向下滚动，认识 PEROT</span>
+        </div>
+        <span className="ab-motif ab-motif-ball"><Basketball size={64} /></span>
+      </section>
+
+      <section className="ab-letters">
+        <p className="eyebrow ab-obs">P · E · R · O · T</p>
+        <h2 className="ab-obs">名字里的五个字母</h2>
+        <p className="ab-sub ab-obs">每一个字母，都是系统的一层。</p>
+        <ol>
+          {LETTERS.map(([l, en, zh, d], i) => (
+            <li key={l} className="ab-obs ab-letter" style={{ ["--i" as string]: i }}>
+              <b data-no-translate>{l}</b>
+              <div><small data-no-translate>{en}</small><strong>{zh}</strong><p>{d}</p></div>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section className="ab-founder ab-watch" id="founder">
+        <figure className="ab-portrait">
+          <img src="/about/founder.jpg" alt="YUQINYU" />
+          <figcaption data-no-translate>YUQINYU — FOUNDER</figcaption>
+        </figure>
+        <div className="ab-founder-copy">
+          <p className="eyebrow ab-obs">FOUNDER</p>
+          <h2 className="ab-obs"><span data-no-translate>YUQINYU</span></h2>
+          <p className="ab-role">PEROT 创始人</p>
+          <p className="ab-school">韩国全南大学 · 多媒体专业 · 三年级</p>
+          <p>我一直在打球，也一直在买鞋。真正让我困扰的不是鞋不够多，而是同一双鞋，别人说舒服，我穿着却磨脚；评测说缓震很好，我却觉得软塌、没有支撑。</p>
+          <p>后来我明白：“这双鞋好不好”从来不是最重要的问题。真正的问题是——这双鞋适不适合这个人？宽脚、体重较大的球员，和轻快的后卫，需要的根本不是同一双鞋。</p>
+          <p>于是我把多媒体专业学到的设计、交互与数据，用在自己最熟悉的球场上，做了 PEROT：先认识人，再理解数据，最后才给出一双鞋。</p>
+          <blockquote className="ab-obs">“我想做的不是一个篮球鞋排行榜，而是一个真正懂你怎么打球的决策系统。”</blockquote>
+          <span className="ab-sign" data-no-translate>— YUQINYU</span>
+        </div>
+      </section>
+
+      <section className="ab-stats ab-obs">
+        <p className="eyebrow ab-obs">BY THE NUMBERS</p>
+        <h2 className="ab-obs">数字里的 PEROT</h2>
+        <div className="ab-stat-grid">
+          {STATS.map(([n, l], i) => (
+            <div key={l} style={{ ["--i" as string]: i }}><b data-count={n} data-no-translate>0</b><span>{l}</span></div>
+          ))}
+        </div>
+      </section>
+
+      <section className="ab-loop">
+        <p className="eyebrow ab-obs">HOW IT WORKS</p>
+        <h2 className="ab-obs">它如何工作</h2>
+        <p className="ab-sub ab-obs">一个不会停下的循环。</p>
+        <div className="ab-loop-row ab-obs">
+          {LOOP.map((s, i) => (<div key={s} style={{ ["--i" as string]: i }}><small data-no-translate>0{i + 1}</small><strong>{s}</strong></div>))}
+        </div>
+        <p className="ab-formula" data-no-translate>Score = 0.6 × Personal Match + 0.4 × Historical Shoe Similarity</p>
+        <span className="ab-motif ab-motif-stomp"><StompShoe /></span>
+      </section>
+
+      <section className="ab-values">
+        <p className="eyebrow ab-obs">VALUES</p>
+        <h2 className="ab-obs">我们相信的事</h2>
+        <div className="ab-value-grid">
+          {VALUES.map(([t, d], i) => (<article key={t} className="ab-obs" style={{ ["--i" as string]: i }}><small data-no-translate>0{i + 1}</small><h3>{t}</h3><p>{d}</p></article>))}
+        </div>
+      </section>
+
+      <section className="ab-road">
+        <p className="eyebrow ab-obs">ROADMAP</p>
+        <h2 className="ab-obs">路线图</h2>
+        <p className="ab-sub ab-obs">从一个想法，到一个系统。</p>
+        <ol className="ab-timeline">
+          {ROADMAP.map(([k, s, d], i) => (<li key={k} className="ab-obs" style={{ ["--i" as string]: i }}><b data-no-translate>{k}</b><em>{s}</em><p>{d}</p></li>))}
+        </ol>
+      </section>
+
+      <section className="ab-cta">
+        <Flourish className="ab-flourish" />
+        <h2 className="ab-obs">找到真正属于你的那一双。</h2>
+        <Link className="ab-cta-btn" href="/profile-builder">开始用户画像测评</Link>
+      </section>
+    </div>
+  );
+}

@@ -1,0 +1,26 @@
+export type WallMessage = { name: string; lang: string; text: string; shoe: string; likes: number };
+
+export const wallMessages: WallMessage[] = [
+  { name: "jaylen_buckets", lang: "EN", shoe: "Ja 3", likes: 42, text: "Wide forefoot, always pinched toes. The profile test flagged it and the top pick finally gave me room without sliding." },
+  { name: "CourtSideMaya", lang: "EN", shoe: "AE 2", likes: 31, text: "I play on cracked outdoor asphalt. It recommended a tougher rubber and the outsole is still alive after two months." },
+  { name: "ankle_recovery_mike", lang: "EN", shoe: "LeBron 23", likes: 27, text: "Coming back from an ankle sprain, I liked that it told me WHY a low-top was excluded instead of just hiding it." },
+  { name: "PnR_Pete", lang: "EN", shoe: "Luka 4", likes: 19, text: "Left foot half a size bigger than right. Sizing advice told me to go with the left. Fits perfectly." },
+  { name: "hoopsdad_83", lang: "EN", shoe: "KD 18", likes: 15, text: "Bought for my son using the 'balanced pick'. Honest trade-offs written right on the card. Nice." },
+  { name: "서울가드", lang: "KO", shoe: "Ja 3", likes: 38, text: "발볼이 넓어서 늘 반 사이즈 크게 샀는데, 추천받은 신발은 정사이즈로도 앞쪽이 편해요." },
+  { name: "농구하는직장인", lang: "KO", shoe: "Book 2", likes: 24, text: "주 2회 실내 코트에서 뛰는데 쿠셔닝이랑 접지감 균형이 딱 맞았어요. 설명이 친절해서 좋아요." },
+  { name: "리바운드왕", lang: "KO", shoe: "Freak 7", likes: 21, text: "무릎이 안 좋아서 쿠셔닝 필수로 체크했더니 딱딱한 신발은 다 빠지더라고요. 믿음이 갑니다." },
+  { name: "한강코트", lang: "KO", shoe: "Harden Vol. 9", likes: 17, text: "야외 코트용으로 내구성 위주 추천을 받았어요. 석 달째 밑창이 멀쩡합니다." },
+  { name: "슈터민준", lang: "KO", shoe: "Tatum 4", likes: 12, text: "지면 밀착감을 좋아한다고 했더니 낮은 스택 신발을 골라줬어요. 슛 리듬이 더 안정적이에요." },
+  { name: "外线阿杰", lang: "ZH", shoe: "AE 2", likes: 46, text: "脚背高一直压得疼，测完才知道是鞋带区压迫的问题，推荐的这双系紧也不难受。" },
+  { name: "周末野球王", lang: "ZH", shoe: "Ja 3", likes: 33, text: "水泥地打得多，它把耐磨放在前面考虑，还提醒我这双室内抓地会差一点，很诚实。" },
+  { name: "小前锋Leo", lang: "ZH", shoe: "Luka 4", likes: 26, text: "左右脚差了快一个码，以前从没注意过，按建议买大一码的那只，终于不顶脚了。" },
+  { name: "膝盖保卫战", lang: "ZH", shoe: "LeBron 23", likes: 22, text: "前交叉韧带术后复健中，勾了抗扭支撑，推荐里全是结构稳定的鞋，安心很多。" },
+  { name: "篮下小钢炮", lang: "ZH", shoe: "Freak 7", likes: 14, text: "以前只看球星同款，现在先看自己的脚。三双推荐各有取舍，选起来不纠结了。" },
+  { name: "ゆうたPG", lang: "JA", shoe: "Ja 3", likes: 20, text: "幅広の足でもつま先が当たらない一足を見つけられました。理由まで説明してくれるのが嬉しい。" },
+  { name: "Pablo_triples", lang: "ES", shoe: "Book 2", likes: 18, text: "Juego en cancha de cemento y me recomendó una suela duradera. Llevo tres meses y sigue perfecta." },
+  { name: "Lucie.meneuse", lang: "FR", shoe: "Luka 4", likes: 16, text: "Enfin une recommandation qui tient compte de mes deux pieds séparément. Le maintien du talon est parfait." },
+  { name: "Korbjäger_Jonas", lang: "DE", shoe: "KD 18", likes: 13, text: "Nach meiner Knöchelverletzung wollte ich Stabilität. Die Begründungen auf jeder Karte sind super ehrlich." },
+  { name: "Giulia_ala", lang: "IT", shoe: "Tatum 4", likes: 11, text: "Mi piace sentire il campo. Mi ha consigliato una scarpa bassa e reattiva: proprio quello che cercavo." },
+  { name: "Rafa.cesta", lang: "PT", shoe: "Harden Vol. 9", likes: 10, text: "Pé largo e quadra de cimento — a recomendação acertou em cheio no conforto e na durabilidade." },
+  { name: "Minh_Hoops", lang: "VI", shoe: "AE 2", likes: 9, text: "Bàn chân bè nên luôn khó chọn giày. Bài kiểm tra giúp mình tìm được đôi vừa vặn ngay lần đầu." },
+];
